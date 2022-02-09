@@ -44,7 +44,7 @@ there.
 <dependency>
    <groupId>com.github.WiIIiam278</groupId>
    <artifactId>ProfanityCheckerAPI</artifactId>
-   <version>1.0</version>
+   <version>1.0.1</version>
    <scope>compile</scope>
 </dependency>
 ```
