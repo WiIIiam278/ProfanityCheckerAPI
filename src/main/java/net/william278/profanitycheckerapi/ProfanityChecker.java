@@ -42,4 +42,11 @@ public class ProfanityChecker {
         interpreter.set("text", text);
         return interpreter.getValue("predict_prob([text])[0]", Double.class);
     }
+
+    /**
+     * Dispose of this ProfanityChecker and close the jep interpreter
+     */
+    public void dispose() {
+        interpreter.close();
+    }
 }

@@ -6,12 +6,37 @@
 
     <groupId>net.william278</groupId>
     <artifactId>ProfanityCheckerAPI</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <detectJavaApiLink>false</detectJavaApiLink>
+                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <staleDataPath>
+                        ${project.build.directory}/javadoc-bundle-options/maven-javadoc-plugin-stale-data.txt
+                    </staleDataPath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- Jep .jar classes !-->
