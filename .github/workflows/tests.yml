@@ -10,7 +10,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
@@ -30,5 +30,6 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install jep
         python -m pip install alt-profanity-check
+        LD_LIBRARY_PATH=/opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/libjep.so
     - name: Run tests with Maven
       run: mvn -B test --file pom.xml
