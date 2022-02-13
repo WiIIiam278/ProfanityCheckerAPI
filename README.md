@@ -30,10 +30,10 @@ there.
 ```xml
 
 <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+   <repository>
+       <id>jitpack.io</id>
+       <url>https://jitpack.io</url>
+   </repository>
 </repositories>
 ```
 
@@ -42,9 +42,10 @@ there.
 ```xml
 
 <dependency>
-    <groupId>com.github.WiIIiam278</groupId>
-    <artifactId>ProfanityCheckerAPI</artifactId>
-    <version>1.0</version>
+   <groupId>com.github.WiIIiam278</groupId>
+   <artifactId>ProfanityCheckerAPI</artifactId>
+   <version>1.0.1</version>
+   <scope>compile</scope>
 </dependency>
 ```
 
@@ -61,5 +62,4 @@ You should not make more than one instance of `ProfanityChecker` on the same thr
 from jep. Once you are done with a ProfanityChecker, you can safely dispose of it using the `#dispose` method.
 
 Javadocs for
-ProfanityCheckerAPI [are available here](https://javadoc.jitpack.io/com/github/WiIIiam278/ProfanityCheckerAPI/latest/javadoc/index.html)
-.
+ProfanityCheckerAPI [are available here](https://javadoc.jitpack.io/com/github/WiIIiam278/ProfanityCheckerAPI/latest/javadoc/index.html).
