@@ -23,10 +23,21 @@
                     <relocations>
                         <relocation>
                             <pattern>jep</pattern>
-                            <shadedPattern>net.william278.profanitycheckerapi.python</shadedPattern>
+                            <shadedPattern>net.william278.profanitycheckerapi.jep</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
