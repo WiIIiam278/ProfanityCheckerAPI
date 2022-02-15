@@ -28,7 +28,6 @@ there.
 ### Add the repository
 
 ```xml
-
 <repositories>
    <repository>
        <id>jitpack.io</id>
@@ -40,11 +39,10 @@ there.
 ### Add the dependency
 
 ```xml
-
 <dependency>
    <groupId>com.github.WiIIiam278</groupId>
    <artifactId>ProfanityCheckerAPI</artifactId>
-   <version>1.0.1</version>
+   <version>1.1</version>
    <scope>compile</scope>
 </dependency>
 ```
