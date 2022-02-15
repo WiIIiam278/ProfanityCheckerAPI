@@ -29,7 +29,7 @@ public class ProfanityChecker {
      */
     public boolean isTextProfane(String text) {
         interpreter.set("text", text);
-        return interpreter.getValue("predict([text])[0]", Integer.class) == 1;
+        return interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
     }
 
     /**
@@ -40,7 +40,7 @@ public class ProfanityChecker {
      */
     public double getTextProfanityLikelihood(String text) {
         interpreter.set("text", text);
-        return interpreter.getValue("predict_prob([text])[0]", Double.class);
+        return interpreter.getValue("predict_prob([text])[0].item()", Double.class);
     }
 
     /**
