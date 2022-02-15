@@ -31,4 +31,4 @@ jobs:
         python -m pip install jep
         python -m pip install alt-profanity-check
     - name: Run tests with Maven
-      run: mvn -DargLine="-DLD_LIBRARY_PATH=/opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/libjep.so" -B test --file pom.xml
+      run: mvn -DargLine="-DLD_LIBRARY_PATH=/opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/" -B test --file pom.xml
