@@ -1,22 +1,43 @@
 package net.william278.profanitycheckerapi;
 
 import jep.Interpreter;
+import jep.MainInterpreter;
 import jep.SharedInterpreter;
 
 /**
- * Uses <a href="https://github.com/ninia/jep">jep</a> to run <a href="https://pypi.org/project/alt-profanity-check/">alt-profanity-checker</a> to use machine learning to determine if a string of text contains profanity
+ * A class to check if a string contains profanity.
+ * <p>
+ * This uses <a href="https://github.com/ninia/jep">jep</a> to run <a href="https://pypi.org/project/alt-profanity-check/">alt-profanity-checker</a> to use machine learning to determine if a string of text contains profanity
  */
-public class ProfanityChecker {
+public class ProfanityChecker implements AutoCloseable {
 
     /**
      * The jep {@link Interpreter} used to execute the python script
      */
-    private final Interpreter interpreter;
+    private Interpreter interpreter;
 
     /**
-     * Fetches a new instance of the profanity checker class and initialises the interpreter
+     * Create a new ProfanityChecker instance and initialize the interpreter, with a specified jep library path
+     *
+     * @param libraryPath File path of the jep library
+     * @see <a href="https://github.com/ninia/jep/wiki/FAQ#how-do-i-fix-unsatisfied-link-error-no-jep-in-javalibrarypath">How to fix {@code Unsatisfied Link Error: no jep in java.library.path}</a>
+     */
+    public ProfanityChecker(String libraryPath) {
+        MainInterpreter.setJepLibraryPath(libraryPath);
+        initialize();
+    }
+
+    /**
+     * Create a new ProfanityChecker instance and initialize the interpreter
      */
     public ProfanityChecker() {
+        initialize();
+    }
+
+    /**
+     * Starts the <a href="https://github.com/ninia/jep">jep</a> interpreter and imports libraries by initializing a new {@link SharedInterpreter}
+     */
+    private void initialize() {
         interpreter = new SharedInterpreter();
         interpreter.exec("from profanity_check import predict_prob, predict");
     }
@@ -44,9 +65,28 @@ public class ProfanityChecker {
     }
 
     /**
-     * Dispose of this ProfanityChecker and close the jep interpreter
+     * Safely dispose of the ProfanityChecker by closing the jep interpreter
+     *
+     * @throws IllegalStateException if the interpreter was not properly initialized
      */
-    public void dispose() {
-        interpreter.close();
+    @Override
+    public void close() throws IllegalStateException {
+        if (interpreter != null) {
+            interpreter.close();
+        } else {
+            throw new IllegalStateException("The jep interpreter was not initialized");
+        }
     }
+
+    /**
+     * Safely dispose of the ProfanityChecker by closing the jep interpreter
+     *
+     * @throws IllegalStateException if the interpreter was not properly initialized
+     * @deprecated Use {@link #close()}
+     */
+    @Deprecated
+    public void dispose() throws IllegalStateException {
+        close();
+    }
+
 }
