@@ -29,10 +29,14 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install jep
           python -m pip install alt-profanity-check
+      - name: Add jep to library path
+        shell: bash
+        run: |
+          echo "/opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/" >> $GITHUB_PATH
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: -Pjava.library.path='/opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/' build
+          arguments: build
       - name: Upload GitHub Artifact
         uses: actions/upload-artifact@v2
         with:
