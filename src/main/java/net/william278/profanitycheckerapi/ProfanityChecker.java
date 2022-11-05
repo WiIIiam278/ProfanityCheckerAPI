@@ -108,6 +108,53 @@ public class ProfanityChecker implements AutoCloseable {
     }
 
     /**
+     * Determines whether a string of text contains profanity
+     *
+     * @param text The string of text to check timeLimitMilli
+     * @param timeLimitMilli The time limit in milliseconds
+     * @return {@code true} if the text likely contains profanity; {@code false} otherwise
+     */
+    public boolean isTextProfaneBypassTimed(String text, long timeLimitMilli) {
+        Set<String> toCheck = getTextToCheck(text);
+        long startTime = System.currentTimeMillis();
+        for (String s : toCheck) {
+            interpreter.set("text", s);
+            boolean result = interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
+            if (result) {
+                return true;
+            }
+            if (System.currentTimeMillis() - startTime > timeLimitMilli) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns a {@code double} value (0 to 1 inclusive) indicating the probability that the machine learning algorithm thinks the string contains profanity
+     *
+     * @param text The string of text to check
+     * @param timeLimitMilli The time limit in milliseconds
+     * @return A {@code double} ranging between 0 and 1 inclusive that indicates the likelihood the string of text contains profanity
+     */
+    public double getTextProfanityLikelihoodBypassTimed(String text, long timeLimitMilli) {
+        Set<String> toCheck = getTextToCheck(text);
+        double highest = 0;
+        long startTime = System.currentTimeMillis();
+        for (String s : toCheck) {
+            interpreter.set("text", s);
+            double result = interpreter.getValue("predict_prob([text])[0].item()", Double.class);
+            if (result > highest) {
+                highest = result;
+            }
+            if (System.currentTimeMillis() - startTime > timeLimitMilli) {
+                return highest;
+            }
+        }
+        return highest;
+    }
+
+    /**
      * Safely dispose of the ProfanityChecker by closing the jep interpreter
      *
      * @throws IllegalStateException if the interpreter was not properly initialized
