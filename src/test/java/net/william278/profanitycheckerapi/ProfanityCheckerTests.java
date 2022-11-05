@@ -10,13 +10,7 @@ public class ProfanityCheckerTests {
     @Test
     public void givenSentenceContainingProfanity_testIsProfane() {
         Assertions.assertTrue(checker.isTextProfane("This is a fucking test sentence"));
-        Assertions.assertTrue(checker.isTextProfaneBypass("_54848498niggakedsamda"));
         Assertions.assertTrue(checker.isTextProfaneBypass("Sh1tface"));
-        Assertions.assertTrue(checker.isTextProfaneBypass("Twat"));
-        Assertions.assertTrue(checker.isTextProfaneBypass("Cunt"));
-        Assertions.assertTrue(checker.isTextProfaneBypass("n1gga"));
-        Assertions.assertTrue(checker.isTextProfaneBypass("nnnnnnnnnnnnnnnnnnnnnnn1gggggggggggggggggaaaaaaaaaaaaaa56446465495"));
-        System.out.println(checker.getTextProfanityLikelihoodBypass("nnnnnnnnnnnnnnnnnnnnnnn1gggggggggggggggggaaaaaaaaaaaaaa56446465495"));
     }
 
     @Test
