@@ -3,7 +3,7 @@ package net.william278.profanitycheckerapi;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ProfanityTests {
+public class ProfanityCheckerTests {
 
     private static final ProfanityChecker checker = new ProfanityChecker();
 
