@@ -77,14 +77,7 @@ public class ProfanityChecker implements AutoCloseable {
      * @return {@code true} if the text likely contains profanity; {@code false} otherwise
      */
     public boolean isTextProfaneBypass(String text) {
-        Set<String> toCheck = getTextToCheck(text);
-        for (String s : toCheck) {
-            boolean result = isTextProfane(s);
-            if (result) {
-                return true;
-            }
-        }
-        return false;
+        return isTextProfaneBypassTimed(text, Long.MAX_VALUE);
     }
 
     /**
@@ -94,15 +87,7 @@ public class ProfanityChecker implements AutoCloseable {
      * @return A {@code double} ranging between 0 and 1 inclusive that indicates the likelihood the string of text contains profanity
      */
     public double getTextProfanityLikelihoodBypass(String text) {
-        Set<String> toCheck = getTextToCheck(text);
-        double highest = 0;
-        for (String s : toCheck) {
-            double result = getTextProfanityLikelihood(s);
-            if (result > highest) {
-                highest = result;
-            }
-        }
-        return highest;
+        return getTextProfanityLikelihoodBypassTimed(text, Long.MAX_VALUE);
     }
 
     /**
