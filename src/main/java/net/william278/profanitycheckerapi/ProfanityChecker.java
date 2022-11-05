@@ -4,6 +4,10 @@ import jep.Interpreter;
 import jep.MainInterpreter;
 import jep.SharedInterpreter;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * A class to check if a string contains profanity.
  * <p>
@@ -51,8 +55,39 @@ public class ProfanityChecker implements AutoCloseable {
      * @return {@code true} if the text likely contains profanity; {@code false} otherwise
      */
     public boolean isTextProfane(String text) {
-        interpreter.set("text", text);
-        return interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
+        Set<String> toCheck = getTextToCheck(text);
+        for (String s : toCheck) {
+            interpreter.set("text", s);
+            boolean result = interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
+            if (result) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Set<String> getTextToCheck(String text) {
+        Set<String> toCheck = new HashSet<>();
+        toCheck.add(text);
+        toCheck.addAll(List.of(text.split(" ")));
+        Set<String> temp = new HashSet<>(toCheck);
+        for (String s : temp) {
+            toCheck.add(s.replaceAll("[^a-zA-Z]", ""));
+        }
+        temp = new HashSet<>(toCheck);
+        for (String s : temp) {
+            if (s.length() > 1) {
+                for (int i = 0; i < s.length() - 1; i++) {
+                    toCheck.add(s.substring(0, i) + " " + s.substring(i));
+                }
+            }
+        }
+        temp = new HashSet<>(toCheck);
+        for (String s : temp) {
+            toCheck.addAll(List.of(s.split(" ")));
+        }
+        toCheck.removeIf(String::isEmpty);
+        return toCheck;
     }
 
     /**
