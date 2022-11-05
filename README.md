@@ -57,7 +57,7 @@ To build ProfanityCheckerAPI, ensure Python v3.8+, jep and alt-profanity-check (
 ```
 
 ## License
-ProfanityCheckerAPI is licensed under [Apache-2.0 License](https://github.com/WiIIiam278/ProfanityCheckerAPI/blob/master/LICENSE).
+ProfanityCheckerAPI is licensed under [MIT License](https://github.com/WiIIiam278/ProfanityCheckerAPI/blob/master/LICENSE).
 
 ---
-&copy; [William278](https://william278.net/), 2022. Licensed under the Apache-2.0 License.
+&copy; [William278](https://william278.net/), 2022. Licensed under the MIT License.
