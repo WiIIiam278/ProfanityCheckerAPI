@@ -88,6 +88,19 @@ public class ProfanityChecker implements AutoCloseable {
         for (String s : temp) {
             toCheck.addAll(List.of(s.split(" ")));
         }
+        temp = new HashSet<>(toCheck);
+        for (String s : temp) {
+            toCheck.add(s.replaceAll("0", "o"));
+            toCheck.add(s.replaceAll("1", "i"));
+            toCheck.add(s.replaceAll("2", "z"));
+            toCheck.add(s.replaceAll("3", "e"));
+            toCheck.add(s.replaceAll("4", "a"));
+            toCheck.add(s.replaceAll("5", "s"));
+            toCheck.add(s.replaceAll("6", "g"));
+            toCheck.add(s.replaceAll("7", "t"));
+            toCheck.add(s.replaceAll("8", "b"));
+            toCheck.add(s.replaceAll("9", "g"));
+        }
         toCheck.removeIf(String::isEmpty);
         return toCheck;
     }
