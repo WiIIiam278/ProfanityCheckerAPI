@@ -101,6 +101,19 @@ public class ProfanityChecker implements AutoCloseable {
             toCheck.add(s.replaceAll("8", "b"));
             toCheck.add(s.replaceAll("9", "g"));
         }
+        //remove repeating characters and only keep the first
+        temp = new HashSet<>(toCheck);
+        for (String s : temp) {
+            StringBuilder sb = new StringBuilder();
+            char lastChar = ' ';
+            for (char c : s.toCharArray()) {
+                if (c != lastChar) {
+                    sb.append(c);
+                    lastChar = c;
+                }
+            }
+            toCheck.add(sb.toString());
+        }
         toCheck.removeIf(String::isEmpty);
         return toCheck;
     }

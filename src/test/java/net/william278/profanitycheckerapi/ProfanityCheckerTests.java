@@ -15,6 +15,7 @@ public class ProfanityCheckerTests {
         Assertions.assertTrue(checker.isTextProfane("Twat"));
         Assertions.assertTrue(checker.isTextProfane("Cunt"));
         Assertions.assertTrue(checker.isTextProfane("n1gga"));
+        Assertions.assertTrue(checker.isTextProfane("nnnnnnnnnnnnnnnnnnnnnnn1gggggggggggggggggaaaaaaaaaaaaaa56446465495"));
     }
 
     @Test
