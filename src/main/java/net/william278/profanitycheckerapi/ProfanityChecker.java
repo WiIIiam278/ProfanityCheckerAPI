@@ -55,6 +55,28 @@ public class ProfanityChecker implements AutoCloseable {
      * @return {@code true} if the text likely contains profanity; {@code false} otherwise
      */
     public boolean isTextProfane(String text) {
+        interpreter.set("text", text);
+        return interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
+    }
+
+    /**
+     * Returns a {@code double} value (0 to 1 inclusive) indicating the probability that the machine learning algorithm thinks the string contains profanity
+     *
+     * @param text The string of text to check
+     * @return A {@code double} ranging between 0 and 1 inclusive that indicates the likelihood the string of text contains profanity
+     */
+    public double getTextProfanityLikelihood(String text) {
+        interpreter.set("text", text);
+        return interpreter.getValue("predict_prob([text])[0].item()", Double.class);
+    }
+
+    /**
+     * Determines whether a string of text contains profanity
+     *
+     * @param text The string of text to check
+     * @return {@code true} if the text likely contains profanity; {@code false} otherwise
+     */
+    public boolean isTextProfaneBypass(String text) {
         Set<String> toCheck = getTextToCheck(text);
         for (String s : toCheck) {
             interpreter.set("text", s);
@@ -64,6 +86,50 @@ public class ProfanityChecker implements AutoCloseable {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns a {@code double} value (0 to 1 inclusive) indicating the probability that the machine learning algorithm thinks the string contains profanity
+     *
+     * @param text The string of text to check
+     * @return A {@code double} ranging between 0 and 1 inclusive that indicates the likelihood the string of text contains profanity
+     */
+    public double getTextProfanityLikelihoodBypass(String text) {
+        Set<String> toCheck = getTextToCheck(text);
+        double highest = 0;
+        for (String s : toCheck) {
+            interpreter.set("text", s);
+            double result = interpreter.getValue("predict_prob([text])[0].item()", Double.class);
+            if (result > highest) {
+                highest = result;
+            }
+        }
+        return highest;
+    }
+
+    /**
+     * Safely dispose of the ProfanityChecker by closing the jep interpreter
+     *
+     * @throws IllegalStateException if the interpreter was not properly initialized
+     */
+    @Override
+    public void close() throws IllegalStateException {
+        if (interpreter != null) {
+            interpreter.close();
+        } else {
+            throw new IllegalStateException("The jep interpreter was not initialized");
+        }
+    }
+
+    /**
+     * Safely dispose of the ProfanityChecker by closing the jep interpreter
+     *
+     * @throws IllegalStateException if the interpreter was not properly initialized
+     * @deprecated Use {@link #close()}
+     */
+    @Deprecated(since = "1.1", forRemoval = true)
+    public void dispose() throws IllegalStateException {
+        close();
     }
 
     private Set<String> getTextToCheck(String text) {
@@ -116,42 +182,6 @@ public class ProfanityChecker implements AutoCloseable {
         }
         toCheck.removeIf(String::isEmpty);
         return toCheck;
-    }
-
-    /**
-     * Returns a {@code double} value (0 to 1 inclusive) indicating the probability that the machine learning algorithm thinks the string contains profanity
-     *
-     * @param text The string of text to check
-     * @return A {@code double} ranging between 0 and 1 inclusive that indicates the likelihood the string of text contains profanity
-     */
-    public double getTextProfanityLikelihood(String text) {
-        interpreter.set("text", text);
-        return interpreter.getValue("predict_prob([text])[0].item()", Double.class);
-    }
-
-    /**
-     * Safely dispose of the ProfanityChecker by closing the jep interpreter
-     *
-     * @throws IllegalStateException if the interpreter was not properly initialized
-     */
-    @Override
-    public void close() throws IllegalStateException {
-        if (interpreter != null) {
-            interpreter.close();
-        } else {
-            throw new IllegalStateException("The jep interpreter was not initialized");
-        }
-    }
-
-    /**
-     * Safely dispose of the ProfanityChecker by closing the jep interpreter
-     *
-     * @throws IllegalStateException if the interpreter was not properly initialized
-     * @deprecated Use {@link #close()}
-     */
-    @Deprecated(since = "1.1", forRemoval = true)
-    public void dispose() throws IllegalStateException {
-        close();
     }
 
 }
