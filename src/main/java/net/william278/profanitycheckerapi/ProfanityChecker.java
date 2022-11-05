@@ -9,6 +9,7 @@ import jep.SharedInterpreter;
  * <p>
  * This uses <a href="https://github.com/ninia/jep">jep</a> to run <a href="https://pypi.org/project/alt-profanity-check/">alt-profanity-checker</a> to use machine learning to determine if a string of text contains profanity
  */
+@SuppressWarnings("unused")
 public class ProfanityChecker implements AutoCloseable {
 
     /**
@@ -20,7 +21,8 @@ public class ProfanityChecker implements AutoCloseable {
      * Create a new ProfanityChecker instance and initialize the interpreter, with a specified jep library path
      *
      * @param libraryPath File path of the jep library
-     * @see <a href="https://github.com/ninia/jep/wiki/FAQ#how-do-i-fix-unsatisfied-link-error-no-jep-in-javalibrarypath">How to fix {@code Unsatisfied Link Error: no jep in java.library.path}</a>
+     * @see <a href="https://github.com/ninia/jep/wiki/FAQ#how-do-i-fix-unsatisfied-link-error-no-jep-in-javalibrarypath">
+     * How to fix "Unsatisfied Link Error: no jep in java.library.path"</a>
      */
     public ProfanityChecker(String libraryPath) {
         MainInterpreter.setJepLibraryPath(libraryPath);
@@ -84,7 +86,7 @@ public class ProfanityChecker implements AutoCloseable {
      * @throws IllegalStateException if the interpreter was not properly initialized
      * @deprecated Use {@link #close()}
      */
-    @Deprecated
+    @Deprecated(since = "1.1", forRemoval = true)
     public void dispose() throws IllegalStateException {
         close();
     }
