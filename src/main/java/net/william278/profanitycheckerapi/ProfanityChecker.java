@@ -73,6 +73,8 @@ public class ProfanityChecker implements AutoCloseable {
         Set<String> temp = new HashSet<>(toCheck);
         for (String s : temp) {
             toCheck.add(s.replaceAll("[^a-zA-Z]", ""));
+            toCheck.add(s.replaceAll("[^0-9]", ""));
+            toCheck.add(s.replaceAll("[^a-zA-Z0-9]", ""));
         }
         temp = new HashSet<>(toCheck);
         for (String s : temp) {
