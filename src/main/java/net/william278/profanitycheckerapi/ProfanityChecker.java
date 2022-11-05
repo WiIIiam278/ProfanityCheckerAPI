@@ -79,8 +79,7 @@ public class ProfanityChecker implements AutoCloseable {
     public boolean isTextProfaneBypass(String text) {
         Set<String> toCheck = getTextToCheck(text);
         for (String s : toCheck) {
-            interpreter.set("text", s);
-            boolean result = interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
+            boolean result = isTextProfane(s);
             if (result) {
                 return true;
             }
@@ -98,8 +97,7 @@ public class ProfanityChecker implements AutoCloseable {
         Set<String> toCheck = getTextToCheck(text);
         double highest = 0;
         for (String s : toCheck) {
-            interpreter.set("text", s);
-            double result = interpreter.getValue("predict_prob([text])[0].item()", Double.class);
+            double result = getTextProfanityLikelihood(s);
             if (result > highest) {
                 highest = result;
             }
@@ -118,8 +116,7 @@ public class ProfanityChecker implements AutoCloseable {
         Set<String> toCheck = getTextToCheck(text);
         long startTime = System.currentTimeMillis();
         for (String s : toCheck) {
-            interpreter.set("text", s);
-            boolean result = interpreter.getValue("predict([text])[0].item()", Integer.class) == 1;
+            boolean result = isTextProfane(s);
             if (result) {
                 return true;
             }
@@ -142,8 +139,7 @@ public class ProfanityChecker implements AutoCloseable {
         double highest = 0;
         long startTime = System.currentTimeMillis();
         for (String s : toCheck) {
-            interpreter.set("text", s);
-            double result = interpreter.getValue("predict_prob([text])[0].item()", Double.class);
+            double result = getTextProfanityLikelihood(s);
             if (result > highest) {
                 highest = result;
             }
