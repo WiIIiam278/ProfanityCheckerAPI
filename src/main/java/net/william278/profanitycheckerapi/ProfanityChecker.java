@@ -163,41 +163,122 @@ public class ProfanityChecker implements AutoCloseable {
     private Set<String> getTextToCheck(String text) {
         Set<String> toCheck = new HashSet<>();
         toCheck.add(text);
-        toCheck.addAll(List.of(text.split(" ")));
-        Set<String> temp = new HashSet<>(toCheck);
-        for (String s : temp) {
-            toCheck.add(s.replaceAll("[^a-zA-Z]", ""));
-            toCheck.add(s.replaceAll("[^0-9]", ""));
-            toCheck.add(s.replaceAll("[^a-zA-Z0-9]", ""));
+        toCheck.addAll(addSubStringsBasedOnSpace(toCheck));
+        toCheck.addAll(removeNumbers(toCheck));
+        toCheck.addAll(removeLetters(toCheck));
+        toCheck.addAll(removeLettersAndNumbers(toCheck));
+        toCheck.addAll(addSpaces(toCheck));
+        toCheck.addAll(addSubStringsBasedOnSpace(toCheck));
+        toCheck.addAll(convertNumbersToLetters(toCheck));
+        toCheck.addAll(removeRepeatingCharacters(toCheck));
+        toCheck.removeIf(String::isEmpty);
+        return toCheck;
+    }
+
+    /**
+     * Adds all substrings of the given strings that are separated by a space
+     *
+     * @param input The strings to add substrings to
+     * @return A set of strings with substrings added
+     */
+    public Set<String> addSubStringsBasedOnSpace(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
+            output.addAll(List.of(s.split(" ")));
         }
-        temp = new HashSet<>(toCheck);
-        for (String s : temp) {
+        return output;
+    }
+
+    /**
+     * Removes all numbers from the given strings
+     *
+     * @param input The strings to remove number from
+     * @return A set of strings with numbers removed
+     */
+    public Set<String> removeNumbers(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
+            output.add(s.replaceAll("[^a-zA-Z]", ""));
+        }
+        return output;
+    }
+
+    /**
+     * Removes all letters from the given strings
+     *
+     * @param input The strings to remove letters from
+     * @return A set of strings with letters removed
+     */
+    public Set<String> removeLetters(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
+            output.add(s.replaceAll("[^0-9]", ""));
+        }
+        return output;
+    }
+
+    /**
+     * Removes all letters and numbers from the given strings
+     *
+     * @param input The strings to remove letters and numbers from
+     * @return A set of strings with letters and numbers removed
+     */
+    public Set<String> removeLettersAndNumbers(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
+            output.add(s.replaceAll("[^a-zA-Z0-9]", ""));
+        }
+        return output;
+    }
+
+    /**
+     * Adds spaces between all characters in the given strings
+     *
+     * @param input The strings to add spaces to
+     * @return A set of strings with spaces added
+     */
+    public Set<String> addSpaces(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
             if (s.length() > 1) {
                 for (int i = 0; i < s.length() - 1; i++) {
-                    toCheck.add(s.substring(0, i) + " " + s.substring(i));
+                    output.add(s.substring(0, i) + " " + s.substring(i));
                 }
             }
         }
-        temp = new HashSet<>(toCheck);
-        for (String s : temp) {
-            toCheck.addAll(List.of(s.split(" ")));
+        return output;
+    }
+
+    /**
+     * Converts all numbers in the given strings to letters
+     *
+     * @param input The strings to convert numbers to letters
+     * @return A set of strings with numbers converted to letters
+     */
+    public Set<String> convertNumbersToLetters(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
+            output.add(s.replaceAll("0", "o")
+                    .replaceAll("1", "i")
+                    .replaceAll("3", "e")
+                    .replaceAll("4", "a")
+                    .replaceAll("5", "s")
+                    .replaceAll("7", "t")
+                    .replaceAll("8", "b")
+                    .replaceAll("9", "g"));
         }
-        temp = new HashSet<>(toCheck);
-        for (String s : temp) {
-            toCheck.add(s.replaceAll("0", "o"));
-            toCheck.add(s.replaceAll("1", "i"));
-            toCheck.add(s.replaceAll("2", "z"));
-            toCheck.add(s.replaceAll("3", "e"));
-            toCheck.add(s.replaceAll("4", "a"));
-            toCheck.add(s.replaceAll("5", "s"));
-            toCheck.add(s.replaceAll("6", "g"));
-            toCheck.add(s.replaceAll("7", "t"));
-            toCheck.add(s.replaceAll("8", "b"));
-            toCheck.add(s.replaceAll("9", "g"));
-        }
-        //remove repeating characters and only keep the first
-        temp = new HashSet<>(toCheck);
-        for (String s : temp) {
+        return output;
+    }
+
+    /**
+     * Removes all repeating characters in the given strings
+     *
+     * @param input The strings to remove repeating characters from
+     * @return A set of strings with repeating characters removed
+     */
+    public Set<String> removeRepeatingCharacters(Set<String> input) {
+        Set<String> output = new HashSet<>();
+        for (String s : input) {
             StringBuilder sb = new StringBuilder();
             char lastChar = ' ';
             for (char c : s.toCharArray()) {
@@ -206,10 +287,8 @@ public class ProfanityChecker implements AutoCloseable {
                     lastChar = c;
                 }
             }
-            toCheck.add(sb.toString());
+            output.add(sb.toString());
         }
-        toCheck.removeIf(String::isEmpty);
-        return toCheck;
+        return output;
     }
-
 }
