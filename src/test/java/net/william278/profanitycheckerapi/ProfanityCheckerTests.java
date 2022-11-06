@@ -16,6 +16,11 @@ public class ProfanityCheckerTests {
     }
 
     @Test
+    public void givenScunthorpe_testIsNotProfane() {
+        Assertions.assertFalse(checker.isTextProfane("Scunthorpe"));
+    }
+
+    @Test
     public void givenProfaneWord_testIsProfane() {
         Assertions.assertTrue(checker.isTextProfane("fuck"));
     }
