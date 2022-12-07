@@ -35,7 +35,7 @@ jobs:
       - name: Add jep to LD_LIBRARY_PATH
         shell: bash
         run: |
-          echo "LD_LIBRARY_PATH=/opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/jep/" >> $GITHUB_ENV
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
