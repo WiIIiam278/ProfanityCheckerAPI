@@ -85,12 +85,13 @@ public class ProfanityChecker implements AutoCloseable {
     }
 
     /**
-     * Check if a string contains profanity using the configured checker
+     * Check if a string contains profanity using the configured checker.
+     * <p>
+     * If a threshold was set through the builder, this will return true if the likelihood of the string
+     * containing profanity is greater than the {@link #threshold}
      *
      * @param text The text to check
      * @return {@code true} if the text contains profanity, {@code false} otherwise
-     * @apiNote If a threshold was set through the builder, this will return true if the likelihood of the string
-     * containing profanity is greater than the {@link #threshold}
      */
     public boolean isProfane(@NotNull String text) {
         final String normalized = normalizeText(text);
