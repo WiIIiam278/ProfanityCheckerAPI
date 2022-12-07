@@ -5,34 +5,34 @@ import org.junit.jupiter.api.Test;
 
 public class ProfanityCheckerTests {
 
-    private static final ProfanityChecker checker = new ProfanityChecker();
+    private static final ProfanityChecker checker = ProfanityChecker.builder().build();
 
     @Test
     public void givenSentenceContainingProfanity_testIsProfane() {
-        Assertions.assertTrue(checker.isTextProfane("This is a fucking test sentence"));
-        Assertions.assertTrue(checker.isTextProfaneBypass("Sh1tface"));
-        Assertions.assertFalse(checker.isTextProfaneBypass("AHOJ"));
-        Assertions.assertFalse(checker.isTextProfaneBypass("Hello"));
+        Assertions.assertTrue(checker.isProfane("This is a fucking test sentence"));
+        Assertions.assertTrue(checker.isProfane("Sh1tface"));
+        Assertions.assertFalse(checker.isProfane("AHOJ"));
+        Assertions.assertFalse(checker.isProfane("Hello"));
     }
 
     @Test
     public void givenScunthorpe_testIsNotProfane() {
-        Assertions.assertFalse(checker.isTextProfane("Scunthorpe"));
+        Assertions.assertFalse(checker.isProfane("Scunthorpe"));
     }
 
     @Test
     public void givenProfaneWord_testIsProfane() {
-        Assertions.assertTrue(checker.isTextProfane("fuck"));
+        Assertions.assertTrue(checker.isProfane("fuck"));
     }
 
     @Test
     public void givenProfaneAcronym_testIsProfane() {
-        Assertions.assertTrue(checker.isTextProfane("wtf"));
+        Assertions.assertTrue(checker.isProfane("wtf"));
     }
 
     @Test
-    public void givenProfaneWord_testProfanityLikelihoodThreshold() {
-        Assertions.assertTrue(checker.getTextProfanityLikelihood("fuck") > 0.9d);
+    public void givenProfaneWord_testProfanityProbabilityChecker() {
+        Assertions.assertTrue(checker.getProfanityProbability("fuck") > 0.9d);
     }
 
 }
