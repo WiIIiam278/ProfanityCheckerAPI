@@ -46,7 +46,13 @@ public class ProfanityChecker implements AutoCloseable {
     private final double threshold;
 
     /**
-     * Create a new ProfanityChecker instance and initialize the interpreter
+     * Create a new ProfanityChecker instance and initialize the interpreter.
+     *
+     * @param libraryPath  The path to the jep library file
+     * @param normalizers  The normalizers to use
+     * @param useThreshold Whether to use a threshold
+     * @param threshold    The threshold to use
+     * @see #builder() {@code #builder()} to get a {@link ProfanityCheckerBuilder} instance
      */
     protected ProfanityChecker(@Nullable String libraryPath, @NotNull List<Normalizer> normalizers,
                                boolean useThreshold, double threshold) {
