@@ -80,7 +80,7 @@ public class ProfanityChecker implements AutoCloseable {
 
     public boolean isProfane(@NotNull String text) {
         final String normalized = normalizeText(text);
-        return useThreshold ? getProfanityProbability(text) > threshold : containsProfanity(text);
+        return useThreshold ? getProfanityProbability(text) >= threshold : containsProfanity(text);
     }
 
     /**

@@ -8,9 +8,19 @@ public class ProfanityCheckerTests {
     private static final ProfanityChecker checker = ProfanityChecker.builder().build();
 
     @Test
-    public void givenSentenceContainingProfanity_testIsProfane() {
+    public void givenSentencesWithProfanity_testIsProfane() {
         Assertions.assertTrue(checker.isProfane("This is a fucking test sentence"));
-        Assertions.assertTrue(checker.isProfane("Sh1tface"));
+        Assertions.assertTrue(checker.isProfane("You stupid 5h1t"));
+    }
+
+    @Test
+    public void givenSentencesWithoutProfanity_testIsNotProfane() {
+        Assertions.assertFalse(checker.isProfane("This is a test sentence"));
+        Assertions.assertFalse(checker.isProfane("You are a good person"));
+    }
+
+    @Test
+    public void givenLeetPhrasesWithoutProfanity_testIsNotProfane() {
         Assertions.assertFalse(checker.isProfane("AHOJ"));
         Assertions.assertFalse(checker.isProfane("Hello"));
     }
