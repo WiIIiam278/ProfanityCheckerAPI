@@ -33,7 +33,7 @@ Then, add the dependency in your `<dependencies>` section.
 <dependency>
    <groupId>net.william278</groupId>
    <artifactId>ProfanityCheckerAPI</artifactId>
-   <version>1.2</version>
+   <version>2.0.1</version>
    <scope>compile</scope>
 </dependency>
 ```
@@ -42,16 +42,30 @@ Then, add the dependency in your `<dependencies>` section.
 JitPack has [a handy guide](https://jitpack.io/#net.william278/ProfanityCheckerAPI/#How_to) for how to use the dependency with other build platforms.
 
 ## Usage
-Create an instance of the `ProfanityChecker` class to get started. It is recommended that you handle these operations on a separate thread from the main thread as jep can be an expensive blocking operation.
+First of all, make sure the environment you're deploying your application on has Python v3.8+ with `jep` and `alt-profanity-check` installed on, and ensure jep's library is in your application's classpath (i.e. by setting LD_LIBRARY_PATH on Linux).
 
-You can then simply get if text is profane using the `#isTextProfane(String)` method. Alternatively, you can return a probability double (0 to 1 inclusive) of how likely the machine learning algorithm thinks the text contains profanity using the `#getTextProfanityLikelihood(String)` method.
+Get a `ProfanityCheckerBuilder` using `ProfanityChecker#builder()`. You can configure the checker to either automatically determine if text is profane (set by default) or specify a threshold double value `withThreshold(double)` to check against. You can additionally specify which normalizers to use. Normalizers adapt the provided string against common bypass techniques, such as leet speak (by default, all normalizers are used). When you've configured the builder, invoke `#build()` to get a ProfanityChecker instance.
 
-You should not make more than one instance of `ProfanityChecker` on the same thread, as this can result in an exception from jep. Once you are done with a ProfanityChecker, you can safely dispose of it using the `#dispose` method.
+With the instance, simply use the `#isProfane(String)` against a string. When you're done with the checker, close it with (`#close`) to dispose of the jep runner instance, or use it in a try-with resources statement.
 
-Javadocs for ProfanityCheckerAPI [are available here](https://javadoc.jitpack.io/net/william278/ProfanityCheckerAPI/latest/javadoc/index.html).
+<details>
+  <summary>Code example</summary>
+  
+  ```java
+  // This will return true if the message contains profanity exceeding a threshold of 0.8
+  public static boolean isMessageProfane(String message) {
+      try (ProfanityChecker checker = ProfanityChecker.builder().withThreshold(0.8d).build()) {
+         return checker.isProfane(message);
+      }
+  }
+  ```
+  
+</details>
+
+* Javadocs for ProfanityCheckerAPI [are available here](https://javadoc.jitpack.io/net/william278/ProfanityCheckerAPI/latest/javadoc/index.html).
 
 ## Building
-To build ProfanityCheckerAPI, ensure Python v3.8+, jep and alt-profanity-check (as well as any dependencies) are installed on your machine, then run the following in the root of the repository:
+To build ProfanityCheckerAPI, ensure Python v3.8+, `jep` and `alt-profanity-check` (as well as any dependencies) are installed on your machine, then run the following in the root of the repository:
 ```
 ./gradlew clean build
 ```
