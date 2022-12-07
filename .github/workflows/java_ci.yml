@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.2/x64/lib/python3.10/site-packages/jep/
+  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/jep/
 
 jobs:
   build:
@@ -32,10 +32,6 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install jep
           python -m pip install alt-profanity-check
-      - name: Add jep to LD_LIBRARY_PATH
-        shell: bash
-        run: |
-          echo "LD_LIBRARY_PATH=/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/jep/" >> $GITHUB_ENV
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
