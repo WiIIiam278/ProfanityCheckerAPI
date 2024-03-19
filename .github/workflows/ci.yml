@@ -1,13 +1,16 @@
-name: Java CI
+# Builds, tests the project with Gradle
+name: CI Tests
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ 'master' ]
+    paths-ignore:
+      - 'workflows/**'
+      - 'README.md'
 
 permissions:
   contents: read
+  checks: write
 
 env:
   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/jep/
@@ -17,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
       - name: Install Python
         uses: actions/setup-python@v4
@@ -35,9 +38,17 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
-      - name: Upload GitHub Artifact
+          arguments: build test publish
+        env:
+          SNAPSHOTS_MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          SNAPSHOTS_MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ProfanityCheckerAPI Library
-          path: build/libs/ProfanityCheckerAPI-*-all.jar
+          name: artifact
+          path: build/libs/*.jar

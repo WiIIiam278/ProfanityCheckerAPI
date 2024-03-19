@@ -1,8 +1,17 @@
+/*
+ * Copyright (c) 2022-2024 William278
+ *
+ * This work is licensed under the terms of the MIT license.
+ * For a copy, see <https://opensource.org/licenses/MIT>.
+ */
+
 package net.william278.profanitycheckerapi;
 
 import jep.Interpreter;
 import jep.MainInterpreter;
 import jep.SharedInterpreter;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,50 +21,50 @@ import java.util.List;
  * A class to check if a string contains profanity.
  * <p>
  * This uses <a href="https://github.com/ninia/jep">jep</a> to run <a href="https://pypi.org/project/alt-profanity-check/">alt-profanity-checker</a> to use machine learning to determine if a string of text contains profanity
- * <p>
- * Get a builder instance using {@link ProfanityChecker#builder()}
  */
-@SuppressWarnings("unused")
+@Builder
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class ProfanityChecker implements AutoCloseable {
 
     /**
-     * The jep {@link Interpreter} used to execute the python script
+     * The jep interpreter
      */
-    private Interpreter interpreter;
+    @Builder.Default
+    private Interpreter interpreter = null;
 
     /**
-     * The path to the jep library file
+     * The path to the jep library file.
+     * <p>
+     * See <a href="https://github.com/ninia/jep/wiki/FAQ#how-do-i-fix-unsatisfied-link-error-no-jep-in-javalibrarypath">
+     * here</a> for help with this setting
      */
     @Nullable
-    private final String libraryPath;
+    @Builder.Default
+    private String libraryPath = null;
 
     /**
      * The normalizers to use
      */
     @NotNull
-    private final List<Normalizer> normalizers;
+    @Builder.Default
+    private List<Normalizer> normalizers = Normalizer.all();
 
     /**
      * Whether to use a threshold
      */
-    private final boolean useThreshold;
+    @Builder.Default
+    private boolean useThreshold = false;
 
     /**
      * The threshold to use
      */
-    private final double threshold;
+    @Builder.Default
+    private double threshold = 0.9d;
 
-    /**
-     * Create a new ProfanityChecker instance and initialize the interpreter.
-     *
-     * @param libraryPath  The path to the jep library file
-     * @param normalizers  The normalizers to use
-     * @param useThreshold Whether to use a threshold
-     * @param threshold    The threshold to use
-     * @see #builder() {@code #builder()} to get a {@link ProfanityCheckerBuilder} instance
-     */
-    protected ProfanityChecker(@Nullable String libraryPath, @NotNull List<Normalizer> normalizers,
-                               boolean useThreshold, double threshold) {
+    @SuppressWarnings("unused")
+    private ProfanityChecker(@Nullable Interpreter interpreter, @Nullable String libraryPath,
+                             @NotNull List<Normalizer> normalizers, boolean useThreshold, double threshold) {
+        this.interpreter = interpreter;
         this.libraryPath = libraryPath;
         this.normalizers = normalizers;
         this.useThreshold = useThreshold;
@@ -64,23 +73,16 @@ public class ProfanityChecker implements AutoCloseable {
     }
 
     /**
-     * Get a builder for a ProfanityChecker instance
-     *
-     * @return A {@link ProfanityCheckerBuilder} instance
+     * Starts the <a href="https://github.com/ninia/jep">jep</a> interpreter and imports libraries by
+     * initializing a new {@link SharedInterpreter}
      */
-    @NotNull
-    public static ProfanityCheckerBuilder builder() {
-        return new ProfanityCheckerBuilder();
-    }
-
-    /**
-     * Starts the <a href="https://github.com/ninia/jep">jep</a> interpreter and imports libraries by initializing a new {@link SharedInterpreter}
-     */
-    private void initialize() {
+    public void initialize() {
         if (this.libraryPath != null) {
             MainInterpreter.setJepLibraryPath(this.libraryPath);
         }
-        this.interpreter = new SharedInterpreter();
+        if (this.interpreter == null) {
+            this.interpreter = new SharedInterpreter();
+        }
         this.interpreter.exec("from profanity_check import predict_prob, predict");
     }
 
@@ -95,7 +97,7 @@ public class ProfanityChecker implements AutoCloseable {
      */
     public boolean isProfane(@NotNull String text) {
         final String normalized = normalizeText(text);
-        return useThreshold ? getProfanityProbability(text) >= threshold : containsProfanity(text);
+        return useThreshold ? getProfanityProbability(normalized) >= threshold : containsProfanity(normalized);
     }
 
     /**
@@ -144,4 +146,5 @@ public class ProfanityChecker implements AutoCloseable {
             this.interpreter.close();
         }
     }
+
 }
